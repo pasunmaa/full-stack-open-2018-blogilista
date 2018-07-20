@@ -1,39 +1,15 @@
-//const http = require('http')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const morgan = require('morgan')
+const middleware = require('./utils/middleware')
+
 const mongoose = require('mongoose')
-
-const BlogSchema = mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number
-})
-
-BlogSchema.statics.format = function (blogentry) {
-  return {
-    id: blogentry._id,
-    title: blogentry.title,
-    author: blogentry.author,
-    url: blogentry.url,
-    likes: blogentry.likes
-  }
-}
-
-const Blog = mongoose.model('Blog', BlogSchema)
-//module.exports = Blog
-
-morgan.token('respdata', (req) => {
-  //console.log(req.body)
-  return JSON.stringify(req.body)
-})
+const Blog = require('./models/blog')
 
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-app.use(morgan(':method :url :respdata :status :res[content-length] - :response-time ms'))
+app.use(middleware.logger(':method :url :respdata :status :res[content-length] - :response-time ms'))
 app.use(express.static('build'))
 
 // const mongoUrl = 'mongodb://<dbuser>:<dbpassword>@ds143971.mlab.com:43971/blogilista'
