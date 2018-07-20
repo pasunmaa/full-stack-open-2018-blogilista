@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs
+content-type: application/json
+
+{
+    "title": "Kalle's blog2",
+    "author": "Kimmo Lehtinen",
+    "url": "http://localhost:3003/api/blogs",
+    "likes": "115"
+}
