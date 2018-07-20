@@ -2,9 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const middleware = require('./utils/middleware')
-
+const blogsRouter = require('./controllers/blogs')
 const mongoose = require('mongoose')
-const Blog = require('./models/blog')
 
 const app = express()
 app.use(cors())
@@ -31,27 +30,11 @@ else {
 //console.log('mongoUrl = ', mongoUrl)
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
 
-app.get('/api/blogs', (request, response) => {
-  Blog
-    .find({})
-    .then(blogs => {
-      response.json(blogs.map(Blog.format))
-    })
-    .catch(error => console.log('bloglist find failed', error))
-})
+app.use('/api/blogs', blogsRouter)
 
-app.post('/api/blogs', (request, response) => {
-  const blog = new Blog(request.body)
+app.use(middleware.error)
 
-  blog
-    .save()
-    .then(savedEntry => {
-      return response.json(Blog.format(savedEntry))
-    })
-    .catch(error => console.log('blogentry.save failed', error))
-})
-
-const PORT = 3003
+const PORT = process.env.PORT || 3003
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

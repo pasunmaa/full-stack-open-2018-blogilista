@@ -7,4 +7,8 @@ logger.token('respdata', (req) => {
 
 //console.log(typeof logger)
 
-module.exports = { logger }
+const error = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+module.exports = { logger, error }
