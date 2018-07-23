@@ -12,7 +12,7 @@ const totalLikes = (blogs) => {
 
 const favoriteBlog = (blogs) => {
   const iMax = blogs.reduce((maxIndex, blog, index, array) =>
-    maxIndex = blog.likes > array[maxIndex].likes ? index : maxIndex
+    blog.likes > array[maxIndex].likes ? index : maxIndex
     /* const iMax = blogs.reduce((maxIndex, blog, index, array) => {
     console.log(blog.likes, array[maxIndex].likes, index, maxIndex, array[index].title)
     maxIndex = blog.likes > array[maxIndex].likes ? index : maxIndex
@@ -26,8 +26,30 @@ const favoriteBlog = (blogs) => {
   }
 }
 
+const mostBlogs = (blogs) => {
+  // 1. Create authors array from blogs array
+  const allAuthors = blogs.reduce((authors, blog) => {
+    let authorIndex = authors.findIndex(author => author.author === blog.author)
+    if (authorIndex + 1)
+      authors[authorIndex].blogs++
+    else {
+      authors.push({
+        author: blog.author,
+        blogs: 1 })
+    }
+    //console.log(authors)
+    return authors
+  }, [])
+  // 2. Find the the author with most blogs from authors array
+  const iMostBlogs = allAuthors.reduce((maxIndex, author, index, array) =>
+    maxIndex = author.blogs > array[maxIndex].blogs ? index : maxIndex, 0)
+
+  return (allAuthors[iMostBlogs])
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs
 }
