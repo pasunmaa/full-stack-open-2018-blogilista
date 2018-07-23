@@ -47,9 +47,32 @@ const mostBlogs = (blogs) => {
   return (allAuthors[iMostBlogs])
 }
 
+const mostLikes = (blogs) => {
+  // 1. Create authors array from blogs array
+  const allAuthors = blogs.reduce((authors, blog) => {
+    let authorIndex = authors.findIndex(author => author.author === blog.author)
+    if (authorIndex + 1)
+      authors[authorIndex].likes += blog.likes
+    else {
+      authors.push({
+        author: blog.author,
+        likes: blog.likes })
+    }
+    //console.log(authors)
+    return authors
+  }, [])
+  // 2. Find the the author with most blogs from authors array
+  const iMostLikes = allAuthors.reduce((maxIndex, author, index, array) =>
+    maxIndex = author.likes > array[maxIndex].likes ? index : maxIndex, 0)
+
+  return (allAuthors[iMostLikes])
+}
+
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
-  mostBlogs
+  mostBlogs,
+  mostLikes
 }
