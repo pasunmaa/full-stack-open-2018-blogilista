@@ -20,7 +20,7 @@ describe('when there is initially some blogs saved', async () => {
         .expect('Content-Type', /application\/json/)
     })
 
-    test('there are five notes', async () => {
+    test('there are blogs', async () => {
       const beforeBlogs = await blogsInDb()
       const response = await api
         .get('/api/blogs')
@@ -36,7 +36,7 @@ describe('when there is initially some blogs saved', async () => {
     })
   })
 
-  describe('valid blog entries can be added', async () => {
+  describe.only('valid blog entries can be added', async () => {
     test('a valid blog can be added ', async () => {
       const newBlog = {
         title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
@@ -61,6 +61,38 @@ describe('when there is initially some blogs saved', async () => {
 
       expect(allBlogs.length).toBe(beforeBlogs.length + 1)
       expect(titles).toContain(newBlog.title)
+    })
+
+    test('if likes in a new blog is not set, it\'s set to 0', async () => {
+      const newBlog = {
+        title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
+        author: 'Random Walker',
+        url: 'https://blogi.nordnet.fi/vapaan-kassavirran-malli-osakkeen-arvonmaarityksessa/'//,
+        //likes: 1
+      }
+
+      const newSavedBlog = await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      expect(newSavedBlog.body.likes).toBe(0)
+    })
+
+    test('if title and url in a new blog are missing, response is 400 Bad request', async () => {
+      const newBlog = {
+        //title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
+        author: 'Random Walker',
+        //url: 'https://blogi.nordnet.fi/vapaan-kassavirran-malli-osakkeen-arvonmaarityksessa/',
+        likes: 10
+      }
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        .expect('Content-Type', /application\/json/)
     })
   })
 })
