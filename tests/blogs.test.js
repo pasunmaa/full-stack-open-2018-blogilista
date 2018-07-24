@@ -2,7 +2,7 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
 const api = supertest(app)
-const { format, initialNotes, nonExistingId, notesInDb } = require('./test_helper')
+const { initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
 
 describe('when there is initially some blogs saved', async () => {
 /*   beforeAll(async () => {
@@ -21,10 +21,11 @@ describe('when there is initially some blogs saved', async () => {
     })
 
     test('there are five notes', async () => {
+      const beforeBlogs = await blogsInDb()
       const response = await api
         .get('/api/blogs')
 
-      expect(response.body.length).toBe(9)
+      expect(response.body.length).toBe(beforeBlogs.length)
     })
 
     test('the first blogs title is Kalle\'s blog', async () => {
@@ -32,6 +33,34 @@ describe('when there is initially some blogs saved', async () => {
         .get('/api/blogs')
 
       expect(response.body[0].title).toBe('Kalle\'s blog')
+    })
+  })
+
+  describe('valid blog entries can be added', async () => {
+    test('a valid blog can be added ', async () => {
+      const newBlog = {
+        title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
+        author: 'Random Walker',
+        url: 'https://blogi.nordnet.fi/vapaan-kassavirran-malli-osakkeen-arvonmaarityksessa/',
+        likes: 1
+      }
+
+      const beforeBlogs = await blogsInDb()
+
+      await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      const allBlogs = await blogsInDb()
+      //console.log(allBlogs)
+      const titles = allBlogs.map(r => r.title)
+      //console.log(titles)
+
+
+      expect(allBlogs.length).toBe(beforeBlogs.length + 1)
+      expect(titles).toContain(newBlog.title)
     })
   })
 })

@@ -17,7 +17,7 @@ app.use(express.static('build'))
 mongoose
   .connect(config.mongoUrl, { useNewUrlParser: true })
   .then( () => {
-    console.log('connected to database', config.mongoUrl)
+    console.log('connected to database') //, config.mongoUrl)
   })
   .catch( err => {
     console.log(err)

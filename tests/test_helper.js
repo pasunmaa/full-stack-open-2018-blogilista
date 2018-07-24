@@ -52,27 +52,29 @@ const initialBlogs = [
 ]
 
 
-const format = (note) => {
+/* const format = (blog) => {
   return {
-    content: note.content,
-    important: note.important,
-    id: note._id
+    title: blog.title,
+    author: blog.author,
+    url: blog.url,
+    likes: blog.likes,
+    id: blog._id
   }
 }
-
+ */
 const nonExistingId = async () => {
-  const note = new Blog()
-  await note.save()
-  await note.remove()
+  const blog = new Blog()
+  await blog.save()
+  await blog.remove()
 
-  return note._id.toString()
+  return blog._id.toString()
 }
 
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
-  return blogs.map(format)
+  return blogs.map(Blog.format)
 }
 
 module.exports = {
-  initialBlogs, format, nonExistingId, blogsInDb
+  initialBlogs, nonExistingId, blogsInDb
 }
