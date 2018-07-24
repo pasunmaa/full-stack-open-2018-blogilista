@@ -4,10 +4,10 @@
   "description": "Helsinki Open University excercise Blogilista",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "watch": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "watch": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "test": "jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,16 @@
   "homepage": "https://github.com/pasunmaa/full-stack-open-2018-blogilista#readme",
   "dependencies": {
     "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
     "express": "^4.16.3",
     "mongoose": "^5.2.4",
     "morgan": "^1.9.0"
   },
   "devDependencies": {
+    "cross-env": "^5.2.0",
     "eslint": "^5.1.0",
     "jest": "^23.4.1",
-    "nodemon": "^1.18.3"
+    "nodemon": "^1.18.3",
+    "supertest": "^3.1.0"
   }
 }
