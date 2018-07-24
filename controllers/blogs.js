@@ -24,7 +24,7 @@ blogsRouter.post('/', async (request, response) => {
       return response.status(400).send({ error: 'title or body missing' })
 
     const blog = new Blog(newBlog)
-    console.log(blog)
+    //console.log(blog)
 
     const savedEntry = await blog.save()
     return response.json(Blog.format(savedEntry))

@@ -5,12 +5,13 @@ const api = supertest(app)
 const { initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
 
 describe('when there is initially some blogs saved', async () => {
-/*   beforeAll(async () => {
+  beforeAll(async () => {
     await Blog.remove({})  // Empty test database
 
-    const noteObjects = initialNotes.map(n => new Blog(n))
-    await Promise.all(noteObjects.map(n => n.save()))
-  }) */
+    // Initialize database with test data
+    const blogObjects = initialBlogs.map(n => new Blog(n))
+    await Promise.all(blogObjects.map(n => n.save()))
+  })
 
   describe('get blogs tests', () => {
     test('blogs are returned as json', async () => {
@@ -28,15 +29,15 @@ describe('when there is initially some blogs saved', async () => {
       expect(response.body.length).toBe(beforeBlogs.length)
     })
 
-    test('the first blogs title is Kalle\'s blog', async () => {
+    test(`the first blogs title is ${initialBlogs[0].title}`, async () => {
       const response = await api
         .get('/api/blogs')
 
-      expect(response.body[0].title).toBe('Kalle\'s blog')
+      expect(response.body[0].title).toBe(initialBlogs[0].title)
     })
   })
 
-  describe.only('valid blog entries can be added', async () => {
+  describe('valid blog entries can be added', async () => {
     test('a valid blog can be added ', async () => {
       const newBlog = {
         title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',

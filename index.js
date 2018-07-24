@@ -11,8 +11,9 @@ const config = require('./utils/config')
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
-app.use(middleware.logger(':method :url :respdata :status :res[content-length] - :response-time ms'))
 app.use(express.static('build'))
+if ( process.env.NODE_ENV !== 'test' )
+  app.use(middleware.logger(':method :url :respdata :status :res[content-length] - :response-time ms'))
 
 mongoose
   .connect(config.mongoUrl, { useNewUrlParser: true })

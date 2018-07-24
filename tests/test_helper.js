@@ -51,17 +51,6 @@ const initialBlogs = [
   }
 ]
 
-
-/* const format = (blog) => {
-  return {
-    title: blog.title,
-    author: blog.author,
-    url: blog.url,
-    likes: blog.likes,
-    id: blog._id
-  }
-}
- */
 const nonExistingId = async () => {
   const blog = new Blog()
   await blog.save()
