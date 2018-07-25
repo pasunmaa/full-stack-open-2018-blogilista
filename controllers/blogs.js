@@ -21,7 +21,7 @@ blogsRouter.post('/', async (request, response) => {
     }
 
     if (request.body.title === undefined || request.body.url === undefined)
-      return response.status(400).send({ error: 'title or body missing' })
+      return response.status(400).json({ error: 'title or body missing' })
 
     const blog = new Blog(newBlog)
     //console.log(blog)
@@ -39,7 +39,7 @@ blogsRouter.delete('/:id', async (request, response) => {
   try {
     query = await Blog.findByIdAndRemove(request.params.id)
     if (query === null)
-      response.status(404).send({ error: 'failed to delete non-existing blog' })
+      response.status(404).json({ error: 'failed to delete non-existing blog' })
     else
       response.status(204).end()
     //console.log(query)
@@ -47,7 +47,28 @@ blogsRouter.delete('/:id', async (request, response) => {
   catch (exception) {
     console.log('blogentry delete failed', exception)
     //console.log(query)
-    response.status(400).send({ error: 'malformatted id' })
+    response.status(400).json({ error: 'malformatted id' })
+  }
+})
+
+blogsRouter.put('/:id', async (request, response) => {
+  try {
+    const blog = {
+      title: request.body.title,
+      author: request.body.author,
+      url: request.body.url,
+      likes: request.body.likes
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true } )
+    if (updatedBlog === null)
+      response.status(404).json({ error: 'failed to udpate non-existing blog' })
+    else
+      response.json(Blog.format(updatedBlog))
+  }
+  catch (exception) {
+    console.log('blogentry udpate failed', exception)
+    response.status(400).json({ error: 'malformatted id' })
   }
 })
 

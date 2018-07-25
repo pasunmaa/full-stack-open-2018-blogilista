@@ -96,6 +96,29 @@ describe('when there is initially some blogs saved', async () => {
         .expect('Content-Type', /application\/json/)
     })
   })
+
+  describe('blog update', async () => {
+    test('an existing blog can be updated', async () => {
+      const blogsBefore = await blogsInDb()
+      const likesBeforeUpdate = blogsBefore[0].likes++
+
+      const updatedBlog = await api
+        .put(`/api/blogs/${blogsBefore[0].id}`)
+        .send(blogsBefore[0])
+        .expect(200)
+        .expect('Content-Type', /application\/json/)
+
+      expect(updatedBlog.body.likes).toBe(likesBeforeUpdate + 1)
+    })
+
+    test('updating a non-existing blog returns 404', async () => {
+      const response = await api
+        .put(`/api/blogs/${await nonExistingId()}`)
+        .expect(404)
+
+      expect(response.body.error).toBe('failed to udpate non-existing blog')
+    })
+  })
 })
 
 describe('delete', async () => {
@@ -111,7 +134,7 @@ describe('delete', async () => {
       .post('/api/blogs')
       .send(newBlog)
 
-    const blogsAtBeginningOfOperation = await blogsInDb()
+    const blogsBefore = await blogsInDb()
 
     await api
       .delete(`/api/blogs/${addedBlog.body.id}`)
@@ -122,7 +145,7 @@ describe('delete', async () => {
     const titles = blogsAfterDelete.map(blog => blog.title)
 
     expect(titles).not.toContain(newBlog.title)
-    expect(blogsAfterDelete.length).toBe(blogsAtBeginningOfOperation.length - 1)
+    expect(blogsAfterDelete.length).toBe(blogsBefore.length - 1)
   })
 
   test('deleting an non-existing blog returns 404', async () => {
