@@ -119,6 +119,10 @@ describe('when there is initially some blogs saved', async () => {
       expect(response.body.error).toBe('failed to udpate non-existing blog')
     })
   })
+
+/*   afterAll(() => {
+    server.close()
+  }) */
 })
 
 describe('delete', async () => {
@@ -157,6 +161,7 @@ describe('delete', async () => {
 })
 
 
-afterAll(() => {
-  server.close()
+afterAll(async () => {
+  await server.close(true)
+  //console.log('server closed in blogs.test.js')
 })

@@ -61,4 +61,10 @@ typings/
 .next
 
 # visual studio configurations
+vscode
 .vscode
+.vscode/*
+.vscode/launch.json
+
+# My own test code
+test_temp.js
