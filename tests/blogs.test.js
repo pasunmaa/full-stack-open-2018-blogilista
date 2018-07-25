@@ -98,6 +98,42 @@ describe('when there is initially some blogs saved', async () => {
   })
 })
 
+describe('delete', async () => {
+  test('a blog can be deleted', async () => {
+    const newBlog = {
+      title: 'Node.js, MongoDB & Express: Simple Add, Edit, Delete, View',
+      author: 'Mukesh Chapagain',
+      url: 'http://blog.chapagain.com.np/node-js-express-mongodb-simple-add-edit-delete-view-crud/',
+      likes: 101
+    }
+
+    const addedBlog = await api
+      .post('/api/blogs')
+      .send(newBlog)
+
+    const blogsAtBeginningOfOperation = await blogsInDb()
+
+    await api
+      .delete(`/api/blogs/${addedBlog.body.id}`)
+      .expect(204)
+
+    const blogsAfterDelete = await blogsInDb()
+
+    const titles = blogsAfterDelete.map(blog => blog.title)
+
+    expect(titles).not.toContain(newBlog.title)
+    expect(blogsAfterDelete.length).toBe(blogsAtBeginningOfOperation.length - 1)
+  })
+
+  test('deleting an non-existing blog returns 404', async () => {
+
+    await api
+      .delete(`/api/blogs/${await nonExistingId()}`)
+      .expect(404)
+  })
+})
+
+
 afterAll(() => {
   server.close()
 })
