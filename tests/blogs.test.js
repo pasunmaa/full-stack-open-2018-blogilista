@@ -2,14 +2,29 @@ const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
 const api = supertest(app)
-const { initialBlogs, nonExistingId, blogsInDb } = require('./test_helper')
+const User = require('../models/user')
+const { initialBlogs, nonExistingId, blogsInDb, usersInDb } = require('./test_helper')
 
 describe('when there is initially some blogs saved', async () => {
   beforeAll(async () => {
     await Blog.remove({})  // Empty test database
 
+    // create a user, if none exist
+    let testuserid = ''
+    const users = await usersInDb()
+    if (users.length === 0) {
+      const user = new User({ username: 'temp', password: 'sekret', adult: true })
+      const testuser = await user.save()
+      testuserid = testuser.id
+    }
+    else
+      testuserid = users[0].id
+
     // Initialize database with test data
-    const blogObjects = initialBlogs.map(n => new Blog(n))
+    const blogObjects = initialBlogs.map(n => {
+      n.user = testuserid
+      return new Blog(n)
+    })
     await Promise.all(blogObjects.map(n => n.save()))
   })
 

@@ -4,8 +4,10 @@ const User = require('../models/user')
 
 usersRouter.get('/',async (request, response) => {
   try {
-    const blogs = await User.find({})
-    response.json(blogs.map(User.format))
+    const users = await User
+      .find({})
+      .populate('blogs', { id: 1, likes: 1, author: 1, title: 1, url: 1 })
+    response.json(users.map(User.format))
   }
   catch (error) {
     console.log('user list find failed', error)
@@ -35,6 +37,7 @@ usersRouter.post('/', async (request, response) => {
       name: body.name,
       passwordHash,
       adult: body.adult,
+      //blogs: []
     })
 
     const savedUser = await user.save()

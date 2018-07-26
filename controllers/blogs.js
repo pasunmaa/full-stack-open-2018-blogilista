@@ -3,7 +3,9 @@ const Blog = require('../models/blog')
 
 blogsRouter.get('/',async (request, response) => {
   try {
-    const blogs = await Blog.find({})
+    const blogs = await Blog
+      .find({})
+      .populate('user', { _id: 1, username: 1, name: 1 })
     response.json(blogs.map(Blog.format))
   }
   catch (error) {
@@ -13,11 +15,16 @@ blogsRouter.get('/',async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   try {
+    const User = require('../models/user')
+    const users = await User.find({})
+    //console.log(users)
+    const firstuserid = users[0].id
     const newBlog = {
       title: request.body.title,
       author: request.body.author,
       url: request.body.url,
-      likes: request.body.likes || 0
+      likes: request.body.likes || 0,
+      user: firstuserid //await User.find({})[0]
     }
 
     if (request.body.title === undefined || request.body.url === undefined)
@@ -27,6 +34,10 @@ blogsRouter.post('/', async (request, response) => {
     //console.log(blog)
 
     const savedEntry = await blog.save()
+
+    users[0].blogs = users[0].blogs.concat(savedEntry._id)
+    await users[0].save()
+
     return response.json(Blog.format(savedEntry))
   }
   catch (error) {
