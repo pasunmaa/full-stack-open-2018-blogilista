@@ -1,24 +1,20 @@
+//const bcrypt = require('bcrypt')
 const supertest = require('supertest')
 const { app, server } = require('../index')
 const Blog = require('../models/blog')
 const api = supertest(app)
 const User = require('../models/user')
-const { initialBlogs, nonExistingId, blogsInDb, usersInDb } = require('./test_helper')
+const { initialBlogs, nonExistingId, blogsInDb, createTestUser, tokenForUser } = require('./test_helper')
 
+const testUsernames = []
+let aTestUser = null
 describe('when there is initially some blogs saved', async () => {
   beforeAll(async () => {
     await Blog.remove({})  // Empty test database
 
-    // create a user, if none exist
-    let testuserid = ''
-    const users = await usersInDb()
-    if (users.length === 0) {
-      const user = new User({ username: 'temp', password: 'sekret', adult: true })
-      const testuser = await user.save()
-      testuserid = testuser.id
-    }
-    else
-      testuserid = users[0].id
+    aTestUser = await createTestUser('blogtest1')
+    testUsernames [0] = aTestUser.username
+    const testuserid = aTestUser.id
 
     // Initialize database with test data
     const blogObjects = initialBlogs.map(n => {
@@ -54,6 +50,8 @@ describe('when there is initially some blogs saved', async () => {
 
   describe('valid blog entries can be added', async () => {
     test('a valid blog can be added ', async () => {
+      const validToken = await tokenForUser(aTestUser)
+
       const newBlog = {
         title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
         author: 'Random Walker',
@@ -65,21 +63,21 @@ describe('when there is initially some blogs saved', async () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', 'bearer ' + validToken)
         .send(newBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
 
       const allBlogs = await blogsInDb()
-      //console.log(allBlogs)
       const titles = allBlogs.map(r => r.title)
-      //console.log(titles)
-
 
       expect(allBlogs.length).toBe(beforeBlogs.length + 1)
       expect(titles).toContain(newBlog.title)
     })
 
     test('if likes in a new blog is not set, it\'s set to 0', async () => {
+      const validToken = await tokenForUser(aTestUser)
+
       const newBlog = {
         title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
         author: 'Random Walker',
@@ -89,6 +87,7 @@ describe('when there is initially some blogs saved', async () => {
 
       const newSavedBlog = await api
         .post('/api/blogs')
+        .set('Authorization', 'bearer ' + validToken)
         .send(newBlog)
         .expect(200)
         .expect('Content-Type', /application\/json/)
@@ -97,6 +96,7 @@ describe('when there is initially some blogs saved', async () => {
     })
 
     test('if title and url in a new blog are missing, response is 400 Bad request', async () => {
+      const validToken = await tokenForUser(aTestUser)
       const newBlog = {
         //title: 'Vapaan kassavirran malli osakkeen arvonmäärityksessä',
         author: 'Random Walker',
@@ -106,6 +106,7 @@ describe('when there is initially some blogs saved', async () => {
 
       await api
         .post('/api/blogs')
+        .set('Authorization', 'bearer ' + validToken)
         .send(newBlog)
         .expect(400)
         .expect('Content-Type', /application\/json/)
@@ -134,10 +135,6 @@ describe('when there is initially some blogs saved', async () => {
       expect(response.body.error).toBe('failed to udpate non-existing blog')
     })
   })
-
-/*   afterAll(() => {
-    server.close()
-  }) */
 })
 
 describe('delete', async () => {
@@ -149,8 +146,11 @@ describe('delete', async () => {
       likes: 101
     }
 
+    const validToken = await tokenForUser(aTestUser)
+
     const addedBlog = await api
       .post('/api/blogs')
+      .set('Authorization', 'bearer ' + validToken)
       .send(newBlog)
 
     const blogsBefore = await blogsInDb()
@@ -177,6 +177,9 @@ describe('delete', async () => {
 
 
 afterAll(async () => {
+  // remove all test users used in this module test
+  //console.log(testUsernames)
+  await User.remove({ username: testUsernames })
   await server.close(true)
   //console.log('server closed in blogs.test.js')
 })

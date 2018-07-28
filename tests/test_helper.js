@@ -1,5 +1,10 @@
+const bcrypt = require('bcrypt')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const supertest = require('supertest')
+const { app } = require('../index')
+const api = supertest(app)
+
 
 const initialBlogs = [
   {
@@ -70,6 +75,39 @@ const usersInDb = async () => {
   return users
 }
 
+const tokenForUser = async (user) => {
+  if (!user) {
+    const aUser = {
+      username: 'temp',
+      name: 'Tilapäinen Käyttäjä',
+      password: 'sekret',
+    }
+    user = aUser
+  }
+  const result = await api
+    .post('/api/login')
+    .send(user)
+
+  if (result.status === 200)
+    return result.body.token
+  else
+    return null
+}
+
+const createTestUser = async (name) => {
+  const password = 'sekret'
+  const saltRounds = 10
+  const passwordHash = await bcrypt.hash(password, saltRounds)
+  const random = Math.random()*1000000
+  const user = new User({
+    username: 'testuser' + random,
+    name: name + random,
+    passwordHash }
+  )
+  const createdUser = await user.save()
+  return { username: createdUser.username, name: createdUser.name, password: password }
+}
+
 module.exports = {
-  initialBlogs, nonExistingId, blogsInDb, usersInDb
+  initialBlogs, nonExistingId, blogsInDb, usersInDb, createTestUser, tokenForUser
 }

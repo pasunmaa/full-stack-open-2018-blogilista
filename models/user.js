@@ -14,7 +14,8 @@ userSchema.statics.format = (user) => {
     username: user.username,
     name: user.name,
     adult: user.adult,
-    blogs: user.blogs
+    blogs: user.blogs,
+    passwordHash: user.passwordHash
   }
 }
 

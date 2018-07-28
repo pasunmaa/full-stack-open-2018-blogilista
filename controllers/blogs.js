@@ -1,5 +1,15 @@
 const blogsRouter = require('express').Router()
+const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 blogsRouter.get('/',async (request, response) => {
   try {
@@ -15,33 +25,44 @@ blogsRouter.get('/',async (request, response) => {
 
 blogsRouter.post('/', async (request, response) => {
   try {
-    const User = require('../models/user')
-    const users = await User.find({})
-    //console.log(users)
-    const firstuserid = users[0].id
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    //console.log(decodedToken)
     const newBlog = {
       title: request.body.title,
       author: request.body.author,
       url: request.body.url,
       likes: request.body.likes || 0,
-      user: firstuserid //await User.find({})[0]
+      user: decodedToken.id
     }
 
     if (request.body.title === undefined || request.body.url === undefined)
       return response.status(400).json({ error: 'title or body missing' })
 
     const blog = new Blog(newBlog)
-    //console.log(blog)
 
     const savedEntry = await blog.save()
 
-    users[0].blogs = users[0].blogs.concat(savedEntry._id)
-    await users[0].save()
+    // Save a new blog to the user's blogs entry in database
+    const aUser = await User.find({ _id: decodedToken.id })
+    aUser[0].blogs = aUser[0].blogs.concat(savedEntry._id)
+    await aUser[0].save()
 
     return response.json(Blog.format(savedEntry))
   }
-  catch (error) {
-    console.log('blogentry save failed', error)
+  catch (exception) {
+    if (exception.name === 'JsonWebTokenError' ) {
+      response.status(401).json({ error: exception.message })
+    }
+    else {
+      console.log('blogentry creation failed', exception)
+      response.status(500).json({ error: 'blogentry creation failed' })
+    }
   }
 })
 

@@ -1,8 +1,9 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJvb3QiLCJpZCI6IjViNTlkNDhmZjAzYjY2NDFkODZkYWUxZiIsImlhdCI6MTUzMjYxMzc3Nn0.wP5ml0SlSz4DQ8lT6oWkqDqCPSu1l5F4ng65VpUAxsQ
 
 {
-    "title": "Kia's blog69",
+    "title": "Kia's blog79",
     "author": "Kiia Lehtinen",
     "url": "http://localhost:3003/api/blogs",
     "likes": "69"
