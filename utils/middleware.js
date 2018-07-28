@@ -5,10 +5,16 @@ logger.token('respdata', (req) => {
   return JSON.stringify(req.body)
 })
 
-//console.log(typeof logger)
-
 const error = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-module.exports = { logger, error }
+const tokenExtractor = (request, response, next) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    request.token = authorization.substring(7)
+  }
+  next()
+}
+
+module.exports = { logger, error, tokenExtractor }

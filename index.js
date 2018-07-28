@@ -16,6 +16,7 @@ app.use(bodyParser.json())
 app.use(express.static('build'))
 if ( process.env.NODE_ENV !== 'test' )
   app.use(middleware.logger(':method :url :respdata :status :res[content-length] - :response-time ms'))
+app.use(middleware.tokenExtractor)
 
 mongoose
   .connect(config.mongoUrl, { useNewUrlParser: true })
@@ -25,7 +26,6 @@ mongoose
   .catch( err => {
     console.log(err)
   })
-
 
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)

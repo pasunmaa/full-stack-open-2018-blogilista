@@ -175,7 +175,6 @@ describe('delete', async () => {
   })
 })
 
-
 afterAll(async () => {
   // remove all test users used in this module test
   //console.log(testUsernames)
