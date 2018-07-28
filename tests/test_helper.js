@@ -105,7 +105,7 @@ const createTestUser = async (name) => {
     passwordHash }
   )
   const createdUser = await user.save()
-  return { username: createdUser.username, name: createdUser.name, password: password }
+  return { username: createdUser.username, name: createdUser.name, password: password, id: createdUser._id }
 }
 
 module.exports = {

@@ -23,7 +23,6 @@ blogsRouter.post('/', async (request, response) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
-    //console.log(decodedToken)
     const newBlog = {
       title: request.body.title,
       author: request.body.author,
@@ -58,18 +57,24 @@ blogsRouter.post('/', async (request, response) => {
 })
 
 blogsRouter.delete('/:id', async (request, response) => {
-  let query = {}
   try {
-    query = await Blog.findByIdAndRemove(request.params.id)
-    if (query === null)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const blog = await Blog.findById(request.params.id)
+    if (!blog)
       response.status(404).json({ error: 'failed to delete non-existing blog' })
-    else
+    else if ( blog.user.toString() !== decodedToken.id.toString() )
+      return response.status(401).json({ error: 'only its creator can delete a blog' })
+    else {
+      await Blog.findByIdAndRemove(request.params.id)
       response.status(204).end()
-    //console.log(query)
+    }
   }
   catch (exception) {
     console.log('blogentry delete failed', exception)
-    //console.log(query)
     response.status(400).json({ error: 'malformatted id' })
   }
 })
