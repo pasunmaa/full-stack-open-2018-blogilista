@@ -13,13 +13,13 @@ if (process.env.NODE_ENV === 'production') {
 else {
   console.log('DEVELOPMENT DB')
   mongoUrl += process.env.DEVELOPMENT_DB
+  //console.log(mongoUrl)
 }
 
 let port = 3001 // default port number
-
 if (process.env.NODE_ENV === 'test')
   port = process.env.TEST_PORT
-else
+else if (process.env.PORT)
   port = process.env.PORT
 
 module.exports = {
