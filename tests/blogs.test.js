@@ -138,7 +138,7 @@ describe('when there is initially some blogs saved', async () => {
   })
 
   describe('delete', async () => {
-    test('a blog can be deleted', async () => {
+    test('a blog can be deleted when creator deletes it', async () => {
       const newBlog = {
         title: 'Node.js, MongoDB & Express: Simple Add, Edit, Delete, View',
         author: 'Mukesh Chapagain',
@@ -157,6 +157,34 @@ describe('when there is initially some blogs saved', async () => {
 
       await api
         .delete(`/api/blogs/${addedBlog.body.id}`)
+        .set('Authorization', 'bearer ' + validToken)
+        .expect(204)
+
+      const blogsAfterDelete = await blogsInDb()
+
+      const titles = blogsAfterDelete.map(blog => blog.title)
+
+      expect(titles).not.toContain(newBlog.title)
+      expect(blogsAfterDelete.length).toBe(blogsBefore.length - 1)
+    })
+
+    test('a blog can be deleted when creator is not defined', async () => {
+      const newBlog = {
+        title: 'Node.js, MongoDB & Express: Simple Add, Edit, Delete, View',
+        author: 'Mukesh Chapagain',
+        url: 'http://blog.chapagain.com.np/node-js-express-mongodb-simple-add-edit-delete-view-crud/',
+        likes: 88
+      }
+      const validToken = await tokenForUser(aTestUser)
+
+      // add a blog to db without creator
+      const blog = new Blog(newBlog)
+      const addedBlog = await blog.save()
+
+      const blogsBefore = await blogsInDb()
+
+      await api
+        .delete(`/api/blogs/${addedBlog._id}`)
         .set('Authorization', 'bearer ' + validToken)
         .expect(204)
 

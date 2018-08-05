@@ -64,7 +64,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     }
 
     const blog = await Blog.findById(request.params.id)
-    console.log('delete blog OWNED BY ', blog.user)
+    //console.log('delete blog OWNED BY ', blog.user)
     if (!blog)
       response.status(404).json({ error: 'failed to delete non-existing blog' })
     else if ( blog.user && (blog.user.toString() !== decodedToken.id.toString()) )
