@@ -20,7 +20,12 @@ loginRouter.post('/', async (request, response) => {
     id: user._id
   }
 
-  const token = jwt.sign(userForToken, process.env.SECRET)
+  let secret = 'Secret'
+  if (process.env.SECRET)
+    secret = process.env.SECRET
+  else
+    secret += (Math.random()*100000000).toFixed(0)
+  const token = jwt.sign(userForToken, secret)
 
   response.status(200).send({ token, username: user.username, name: user.name })
 })
