@@ -94,14 +94,14 @@ const tokenForUser = async (user) => {
     return null
 }
 
-const createTestUser = async (name) => {
+const createTestUser = async (name, norandomname) => {
   const password = 'sekret'
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(password, saltRounds)
   const random = Math.random()*1000000
   const user = new User({
-    username: 'testuser' + random,
-    name: name + random,
+    username: norandomname ? name.toLowerCase().replace(' ', '') : 'testuser' + random,
+    name: norandomname ? name : name + random,
     passwordHash }
   )
   const createdUser = await user.save()
