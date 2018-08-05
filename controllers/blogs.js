@@ -64,12 +64,21 @@ blogsRouter.delete('/:id', async (request, response) => {
     }
 
     const blog = await Blog.findById(request.params.id)
+    console.log('delete blog OWNED BY ', blog.user)
     if (!blog)
       response.status(404).json({ error: 'failed to delete non-existing blog' })
-    else if ( blog.user.toString() !== decodedToken.id.toString() )
+    else if ( blog.user && (blog.user.toString() !== decodedToken.id.toString()) )
+      // if blog.user is undefined anybody can delete it
       return response.status(401).json({ error: 'only its creator can delete a blog' })
     else {
       await Blog.findByIdAndRemove(request.params.id)
+      // remove blog also from the user who has created a blog-entry, if user exists
+      if (blog.user) {
+        const aUser = await User.find({ _id: blog.user })
+        //console.log(request.params.id, aUser[0].blogs)
+        aUser[0].blogs = aUser[0].blogs.filter(blog => blog.toString() !== request.params.id)
+        await aUser[0].save()
+      }
       response.status(204).end()
     }
   }
