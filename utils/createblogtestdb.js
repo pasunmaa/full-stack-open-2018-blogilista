@@ -9,7 +9,7 @@ const createBlogTestDb = async () => {
   // remove all test users created in this module
   const testUsernames = ['Taru Testaaja', 'Toinen Testaaja']
   await User.remove({ name: testUsernames })
-  await Blog.remove({})  // Empty test database
+  await Blog.remove({ title: initialBlogs.map(blog => blog.title) })  // Empty test database
 
   const testUsers = []
   let aTestUser = await createTestUser(testUsernames[0], true)
