@@ -42,8 +42,14 @@ blogsRouter.post('/', async (request, response) => {
     const aUser = await User.find({ _id: decodedToken.id })
     aUser[0].blogs = aUser[0].blogs.concat(savedEntry._id)
     await aUser[0].save()
+    const user = { _id: aUser[0]._id, name: aUser[0].name, username: aUser[0].username }
+    const returnBlog = {
+      ...Blog.format(savedEntry),
+    }
+    returnBlog.user = user
+    //console.log(returnBlog)
 
-    return response.json(Blog.format(savedEntry))
+    return response.json(returnBlog)
   }
   catch (exception) {
     if (exception.name === 'JsonWebTokenError' ) {
