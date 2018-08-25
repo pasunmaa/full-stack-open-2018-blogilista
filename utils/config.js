@@ -1,10 +1,9 @@
 // const mongoUrl = 'mongodb://<dbuser>:<dbpassword>@ds143971.mlab.com:43971/blogilista'
 // Luetaan dbuser ja dbpassword ympäristömuuttujista, joita ei tallenneta Githubiin eikä .env-tiedostoon
-// console.log('DB CREDENTIALS: ',process.env.DbUserPuhLuet+':'+process.env.DbPasswordPuhLuet)
 require('dotenv').config()
 let mongoUrl = 'mongodb://' +
     process.env.DbUserPuhLuet + ':' +
-    process.env.DbPasswordPuhLuet
+    process.env.DbPasswordPuhLuet + '@'
 
 if (process.env.NODE_ENV === 'production') {
   console.log('PRODUCTION DB')
@@ -13,8 +12,11 @@ if (process.env.NODE_ENV === 'production') {
 else {
   console.log('DEVELOPMENT DB')
   mongoUrl += process.env.DEVELOPMENT_DB
-  //console.log(mongoUrl)
 }
+
+//console.log(mongoUrl)
+//console.log('ENVIRONMENT: ', process.env)
+//console.log('DB CREDENTIALS: ',process.env.DbUserPuhLuet+':'+process.env.DbPasswordPuhLuet)
 
 let port = 3001 // default port number
 if (process.env.NODE_ENV === 'test')

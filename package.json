@@ -21,8 +21,8 @@
       "Secret": "@secret",
       "PORT": "3003",
       "TEST_PORT": "0",
-      "PRODUCTION_DB": "@ds143971.mlab.com:43971/blogilista_prod",
-      "DEVELOPMENT_DB": "@ds143971.mlab.com:43971/blogilista",
+      "PRODUCTION_DB": "ds125422.mlab.com:25422/blogilista_prod",
+      "DEVELOPMENT_DB": "ds143971.mlab.com:43971/blogilista",
       "NODE_ENV": "development"
     }
   },
