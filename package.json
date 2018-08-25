@@ -18,6 +18,11 @@
     "env": {
       "DbUserPuhLuet": "@dbuserpuhluet-key",
       "DbPasswordPuhLuet": "@dbpasswordpuhluet-key",
+      "Secret": "@secret",
+      "PORT": "3003",
+      "TEST_PORT": "0",
+      "PRODUCTION_DB": "@ds143971.mlab.com:43971/blogilista_prod",
+      "DEVELOPMENT_DB": "@ds143971.mlab.com:43971/blogilista",
       "NODE_ENV": "development"
     }
   },
