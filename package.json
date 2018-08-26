@@ -14,7 +14,7 @@
     "url": "git+https://github.com/pasunmaa/full-stack-open-2018-blogilista.git"
   },
   "now": {
-    "alias": "petria-blogilista-dev",
+    "alias": "blogilista",
     "env": {
       "DbUserPuhLuet": "@dbuserpuhluet-key",
       "DbPasswordPuhLuet": "@dbpasswordpuhluet-key",
