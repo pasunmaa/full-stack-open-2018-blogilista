@@ -1,5 +1,6 @@
 const http = require('http')
 const express = require('express')
+const path = require('path')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -27,9 +28,13 @@ mongoose
     console.log(err)
   })
 
+app.use(express.static(path.join(__dirname, 'build')))
 app.use('/api/blogs', blogsRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+app.get('/*', (req, res) =>
+  res.sendFile(path.join(__dirname, 'build', 'index.html'))
+)
 
 app.use(middleware.error)
 
