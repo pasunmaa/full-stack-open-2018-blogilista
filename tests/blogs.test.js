@@ -120,7 +120,7 @@ describe('when there is initially some blogs saved', async () => {
       const likesBeforeUpdate = blogsBefore[0].likes++
 
       const updatedBlog = await api
-        .put(`/api/blogs/${blogsBefore[0].id}`)
+        .put(`/api/blogs/${blogsBefore[0]._id}`)
         .send(blogsBefore[0])
         .expect(200)
         .expect('Content-Type', /application\/json/)
@@ -156,7 +156,7 @@ describe('when there is initially some blogs saved', async () => {
       const blogsBefore = await blogsInDb()
 
       await api
-        .delete(`/api/blogs/${addedBlog.body.id}`)
+        .delete(`/api/blogs/${addedBlog.body._id}`)
         .set('Authorization', 'bearer ' + validToken)
         .expect(204)
 
@@ -217,7 +217,7 @@ describe('when there is initially some blogs saved', async () => {
 
       const validToken2 = await tokenForUser(anotherTestUser)
       await api
-        .delete(`/api/blogs/${addedBlog.body.id}`)
+        .delete(`/api/blogs/${addedBlog.body._id}`)
         .set('Authorization', 'bearer ' + validToken2)
         .expect(401)
 

@@ -1,6 +1,6 @@
 {
   "name": "full-stack-open-2018-blogilista",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Helsinki Open University excercise Blogilista",
   "main": "index.js",
   "scripts": {
@@ -14,11 +14,11 @@
     "url": "git+https://github.com/pasunmaa/full-stack-open-2018-blogilista.git"
   },
   "now": {
-    "alias": "blogilista",
+    "alias": "blogilista101",
     "env": {
       "DbUserPuhLuet": "@dbuserpuhluet-key",
       "DbPasswordPuhLuet": "@dbpasswordpuhluet-key",
-      "Secret": "@secret",
+      "SECRET": "@secret",
       "PORT": "3003",
       "TEST_PORT": "0",
       "PRODUCTION_DB": "ds125422.mlab.com:25422/blogilista_prod",

@@ -15,7 +15,7 @@ else {
 }
 
 //console.log(mongoUrl)
-//console.log('ENVIRONMENT: ', process.env)
+//console.log('ENVIRONMENT: ', process.env.SECRET)
 //console.log('DB CREDENTIALS: ',process.env.DbUserPuhLuet+':'+process.env.DbPasswordPuhLuet)
 
 let port = 3001 // default port number
