@@ -41,7 +41,7 @@ app.use(middleware.error)
 const server = http.createServer(app)
 
 server.listen(config.port, () => {
-  console.log(`Server running on port ${config.port}`)
+  console.log(`Server 1.0 running on port ${config.port}`)
 })
 
 server.on('close', () => {
