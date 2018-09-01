@@ -26,8 +26,8 @@ jobs:
         #now --public -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista --token $NOW_TOKEN
       deploy:
         - provider: script # Run a custom deployment script which we will define below
-          script: echo "Mocking now --public ..."
-          #script: now --public --token $NOW_TOKEN
+          script: echo "Starting now --public ..."
+          script: now --public --token $NOW_TOKEN
           #script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
           skip_cleanup: true
           on:
@@ -38,5 +38,6 @@ jobs:
           skip_cleanup: true
           on:
             master: true
-    - stage: Remove old deployment
-      script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
+      after_deploy:
+      - script: echo "Remove old deployments ...""
+      - script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
