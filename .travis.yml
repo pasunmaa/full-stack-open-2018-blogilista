@@ -16,17 +16,4 @@ jobs:
     - stage: Install now
       name: "Install now Zeit CLI to Travis"
       script: npm install now --no-save # Install Now CLI on Travis
-   - stage: Deploy to now
-      script: skip
-      deploy:
-        - provider: script # Run a custom deployment script which we will define below
-          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
-          skip_cleanup: true
-          on:
-            all_branches: true
-            master: false
-        - provider: script
-          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
-          skip_cleanup: true
-          on:
-            master: true
+   
