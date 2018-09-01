@@ -4,6 +4,11 @@ node_js:
 cache:
   directories:
     - "node_modules" # This will tell Travis CI to cache the dependencies
+# whitelist
+branches:
+  only:
+    - master
+    - dev-travis
 script: npm test # Here you could also run the build step of your application
 before_deploy: 
   - npm install now --no-save # Install Now CLI on Travis
