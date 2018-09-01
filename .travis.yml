@@ -15,8 +15,8 @@ jobs:
       name: "Run unit and integration tests"
       script: npm test # Here you could also run the build step of your application
     - stage: Deploy to now
-      install: 
       name: "Deploy to Zeit now"
+      install: 
       - npm install now --no-save # Install Now CLI on Travis
       script: now -e PORT=3003 --token $NOW_TOKEN
       deploy:
