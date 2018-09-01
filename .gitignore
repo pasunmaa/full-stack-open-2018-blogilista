@@ -68,3 +68,6 @@ vscode
 
 # My own test code
 test_temp.js
+
+# Temporaty files
+travis.tmp
