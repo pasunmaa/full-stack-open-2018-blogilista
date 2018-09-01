@@ -14,9 +14,9 @@ else {
   mongoUrl += process.env.DEVELOPMENT_DB
 }
 
-console.log(mongoUrl)
-console.log('ENVIRONMENT: ', process.env.SECRET)
-console.log('DB CREDENTIALS: ',process.env.DbUserPuhLuet+':'+process.env.DbPasswordPuhLuet)
+//console.log(mongoUrl)
+//console.log('ENVIRONMENT: ', process.env.SECRET)
+//console.log('DB CREDENTIALS: ',process.env.DbUserPuhLuet+':'+process.env.DbPasswordPuhLuet)
 
 let port = 3001 // default port number
 if (process.env.NODE_ENV === 'test')

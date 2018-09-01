@@ -8,7 +8,7 @@ cache:
 branches:
   only:
     - master
-    - dev-travis
+    - development
 jobs:
   include:
     - stage: Run tests
@@ -28,3 +28,8 @@ jobs:
           on:
             all_branches: true
             master: false
+        - provider: script
+          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+          skip_cleanup: true
+          on:
+            master: true
