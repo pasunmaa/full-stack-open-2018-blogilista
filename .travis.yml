@@ -18,7 +18,7 @@ before_deploy:
 	- now -e TEST_PORT=0
 deploy:
   - provider: script # Run a custom deployment script which we will define below
-    script: now --public --token $NOW_TOKEN
+    script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
     skip_cleanup: true
     on:
       all_branches: true
