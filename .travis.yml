@@ -12,10 +12,10 @@ branches:
     - travis
 jobs:
   include:
-    - stage: Run tests
-      name: "Run unit and integration tests"
+    - #stage: Run tests
+      #name: "Run unit and integration tests"
       #script: npm test # Here you could also run the build step of your application
-      script: echo "Mocking test runs"
+      #script: echo "Mocking test runs"
     - stage: Deploy to now
       name: "Deploy to Zeit now"
       install: 
