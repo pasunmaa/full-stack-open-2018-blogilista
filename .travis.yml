@@ -9,6 +9,7 @@ branches:
   only:
     - master
     - development
+    - travis
 jobs:
   include:
     - stage: Run tests
@@ -16,11 +17,8 @@ jobs:
       script: npm test # Here you could also run the build step of your application
     - stage: Deploy to now
       name: "Deploy to Zeit now"
-      install: 
-      - npm install now --no-save # Install Now CLI on Travis
       script: skip
-        #now --public -e PORT=3003 --token $NOW_TOKEN
-        #now --public -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista --token $NOW_TOKEN
+      before_deploy: npm install now --no-save # Install Now CLI on Travis
       deploy:
         - provider: script # Run a custom deployment script which we will define below
           script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
@@ -33,5 +31,5 @@ jobs:
           skip_cleanup: true
           on:
             master: true
-    - stage: Remove old deployment
-      script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
+      after_deploy:
+        now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
