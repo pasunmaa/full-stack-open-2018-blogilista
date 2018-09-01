@@ -14,10 +14,10 @@ jobs:
     - stage: Run tests
       name: "Run unit and integration tests"
       script: npm test # Here you could also run the build step of your application
-    - stage: Install now
-      name: "Install now Zeit CLI to Travis"
-      script: npm install now --no-save # Install Now CLI on Travis
     - stage: Deploy to now
+      before_deploy: 
+      name: "Install now Zeit CLI to Travis"
+      - npm install now --no-save # Install Now CLI on Travis
       script: skip
       deploy:
         - provider: script # Run a custom deployment script which we will define below
