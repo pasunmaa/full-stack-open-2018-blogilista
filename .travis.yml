@@ -33,3 +33,5 @@ jobs:
           skip_cleanup: true
           on:
             master: true
+      after_deploy:
+        script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
