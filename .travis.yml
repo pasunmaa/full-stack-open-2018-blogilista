@@ -18,7 +18,7 @@ jobs:
       #script: echo "Mocking test runs"
     - stage: Deploy to now
       name: "Deploy to Zeit now"
-      #install: 
+      install: 
       - npm install now --no-save # Install Now CLI on Travis
       #- npm install # all dependencies defined in package.json
       script:
