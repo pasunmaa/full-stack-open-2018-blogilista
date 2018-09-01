@@ -9,27 +9,33 @@ branches:
   only:
     - master
     - dev-travis
-script: npm test # Here you could also run the build step of your application
-before_deploy: 
-  - npm install now --no-save # Install Now CLI on Travis
-  	# Set secrets to environment variables
-  - now -e DbUserPuhLuet=@dbuserpuhluet-key
-	- now -e DbPasswordPuhLuet=@dbpasswordpuhluet-key
-	- now -e SECRET=@secret
-  	# Set other environment variables
-	- now -e PRODUCTION_DB=@ds143971.mlab.com:43971/blogilista_prod
-	- now -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista
-	- now -e PORT=3003
-	- now -e TEST_PORT=0
-deploy:
-  - provider: script # Run a custom deployment script which we will define below
-    script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
-    skip_cleanup: true
-    on:
-      all_branches: true
-      master: false
-  - provider: script
-    script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
-    skip_cleanup: true
-    on:
-      master: true
+jobs:
+  include:
+    - stage: "Run tests"
+      script: npm test # Here you could also run the build step of your application
+    - stage: "Install now"
+      script: npm install now --no-save # Install Now CLI on Travis
+    - stage: "Setup environment variables to now"
+  	  # Set secrets to environment variables
+      script: now -e DbUserPuhLuet=@dbuserpuhluet-key
+	    script: now -e DbPasswordPuhLuet=@dbpasswordpuhluet-key
+	    script: now -e SECRET=@secret
+  	  # Set other environment variables
+	    script: now -e PRODUCTION_DB=@ds143971.mlab.com:43971/blogilista_prod
+	    script: now -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista
+	    script: now -e PORT=3003
+	    script: now -e TEST_PORT=0
+    - stage: "Deploy to now"
+      script: skip
+      deploy:
+        - provider: script # Run a custom deployment script which we will define below
+          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+          skip_cleanup: true
+          on:
+            all_branches: true
+            master: false
+        - provider: script
+          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+          skip_cleanup: true
+          on:
+            master: true
