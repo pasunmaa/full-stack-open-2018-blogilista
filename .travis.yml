@@ -14,7 +14,8 @@ jobs:
   include:
     - stage: Run tests
       name: "Run unit and integration tests"
-      script: npm test # Here you could also run the build step of your application
+      #script: npm test # Here you could also run the build step of your application
+      script: echo "Mocking test runs"
     - stage: Deploy to now
       name: "Deploy to Zeit now"
       install: 
@@ -25,7 +26,9 @@ jobs:
         #now --public -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista --token $NOW_TOKEN
       deploy:
         - provider: script # Run a custom deployment script which we will define below
-          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+          script: echo "Mocking now --public ..."
+          #script: now --public --token $NOW_TOKEN
+          #script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
           skip_cleanup: true
           on:
             all_branches: true
