@@ -21,8 +21,8 @@ jobs:
       install: 
       - npm install now --no-save # Install Now CLI on Travis
       #- npm install # all dependencies defined in package.json
-      script:
-        now --public -e PORT=3003 --token $NOW_TOKEN
+      script: skip
+        #now --public -e PORT=3003 --token $NOW_TOKEN
         #now --public -e DEVELOPMENT_DB=@ds143971.mlab.com:43971/blogilista --token $NOW_TOKEN
       #before_deploy: npm install now --no-save # Install Now CLI on Travis
       deploy:
