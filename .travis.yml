@@ -33,5 +33,5 @@ jobs:
           skip_cleanup: true
           on:
             master: true
-      - stage: Remove old deployment
-        script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
+    - stage: Remove old deployment
+      script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
