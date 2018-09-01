@@ -14,7 +14,7 @@
     "url": "git+https://github.com/pasunmaa/full-stack-open-2018-blogilista.git"
   },
   "now": {
-    "alias": "blogilista101",
+    "alias": "blogilistadev",
     "env": {
       "DbUserPuhLuet": "@dbuserpuhluet-key",
       "DbPasswordPuhLuet": "@dbpasswordpuhluet-key",
