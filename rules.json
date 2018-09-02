@@ -1,0 +1,6 @@
+{
+  "rules": [
+    { "pathname": "/api/**", "method": ["GET", "POST","DELETE"], "dest": "api-blogilista-dev.now.sh" },
+    { "dest": "ui-blogilista-dev.now.sh" }
+  ]
+}

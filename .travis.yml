@@ -10,6 +10,7 @@ branches:
     - master
     - development
     - travis
+    - rules
 jobs:
   include:
     - stage: Run tests
@@ -32,4 +33,8 @@ jobs:
           on:
             master: true
       after_deploy:
-        now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
+        #now alias blogilista10.now.sh -r rules.json --token $NOW_TOKEN
+        now alias blogilista10.now.sh -r rules.json --token $NOW_TOKEN && now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes
+    #- stage: Cleanup
+    #  name: "Remove old deployments from Zeit now"
+    #  script: now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public  
