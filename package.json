@@ -14,7 +14,7 @@
     "url": "git+https://github.com/pasunmaa/full-stack-open-2018-blogilista.git"
   },
   "now": {
-    "alias": "blogilistadev",
+    "alias": "api-blogilista-dev",
     "env": {
       "DbUserPuhLuet": "@dbuserpuhluet-key",
       "DbPasswordPuhLuet": "@dbpasswordpuhluet-key",
@@ -27,7 +27,8 @@
     }
   },
   "keywords": [
-    "blogilista"
+    "blogilista",
+    "backend"
   ],
   "author": "Petri Asunmaa",
   "license": "ISC",

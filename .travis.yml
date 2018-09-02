@@ -10,6 +10,7 @@ branches:
     - master
     - development
     - travis
+    - rules
 jobs:
   include:
     - stage: Run tests
@@ -27,7 +28,7 @@ jobs:
             all_branches: true
             master: false
         - provider: script
-          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
+          script: now --public --token $NOW_TOKEN && now alias -r rules.json --token $NOW_TOKEN
           skip_cleanup: true
           on:
             master: true
