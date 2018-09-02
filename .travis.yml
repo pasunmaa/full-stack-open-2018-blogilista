@@ -28,9 +28,10 @@ jobs:
             all_branches: true
             master: false
         - provider: script
-          script: now --public --token $NOW_TOKEN && now alias -r rules.json --token $NOW_TOKEN
+          script: now --public --token $NOW_TOKEN && now alias --token $NOW_TOKEN
           skip_cleanup: true
           on:
             master: true
       after_deploy:
+        now alias blogilista10.now.sh -r rules.json --token $NOW_TOKEN
         now rm full-stack-open-2018-blogilista --token $NOW_TOKEN --safe --yes --public
