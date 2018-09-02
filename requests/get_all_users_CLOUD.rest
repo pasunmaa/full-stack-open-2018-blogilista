@@ -1,0 +1,1 @@
+GET https://api-blogilista-dev.now.sh/api/users/
